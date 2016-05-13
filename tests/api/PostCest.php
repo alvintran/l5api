@@ -45,6 +45,14 @@ class PostCest
     public function createPost(ApiTester $I)
     {
         $I->amBearerAuthenticated($this->token);
+
+        // Validation fail
+        $I->sendPOST($this->endpoint, ['title' => '', 'body' => 'By Alvin']);
+        $I->seeResponseCodeIs(422);
+        $I->seeResponseIsJson();
+        $I->seeResponseContains('The title field is required.');
+
+        // Validation success
         $I->sendPOST($this->endpoint, ['title' => 'Game of Rings', 'body' => 'By George Tolkien']);
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();

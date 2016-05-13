@@ -3,17 +3,21 @@
 namespace Nht\Http\Controllers\Api;
 
 use Nht\Http\Controllers\Controller;
+use Illuminate\Http\Response as HttpResponse;
+use League\Fractal\Manager;
+use League\Fractal\Resource\Item;
+use League\Fractal\Resource\Collection;
 
 abstract class ApiController extends Controller
 {
-    protected $statusCode = \Illuminate\Http\Response::HTTP_OK;
+    protected $statusCode = HttpResponse::HTTP_OK;
 
     protected function showResponse($data, $transformer = null)
     {
         if ($transformer)
         {
-            $fractal = new \League\Fractal\Manager();
-            $data = new \League\Fractal\Resource\Item($data, $transformer);
+            $fractal = new Manager;
+            $data = new Item($data, $transformer);
             $data = $fractal->createData($data)->toArray();
         }
         return $this->response($data);
@@ -23,8 +27,8 @@ abstract class ApiController extends Controller
     {
         if ($transformer)
         {
-            $fractal = new \League\Fractal\Manager();
-            $data = new \League\Fractal\Resource\Collection($data, $transformer);
+            $fractal = new Manager;
+            $data = new Collection($data, $transformer);
             $data = $fractal->createData($data)->toArray();
         }
         return $this->response($data);

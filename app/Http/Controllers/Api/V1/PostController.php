@@ -1,54 +1,70 @@
 <?php namespace Nht\Http\Controllers\Api\V1;
 
 use Illuminate\Http\Request;
-use Nht\Http\Requests\PostRequest;
-use Nht\Post;
 use Nht\Http\Controllers\Api\ApiController;
 use Nht\Http\Transformers\PostTransformer;
+use Illuminate\Validation\ValidationException;
+use Nht\Post;
+use Validator;
 
 class PostController extends ApiController
 {
+    protected $model;
     protected $transformer;
+    protected $validationRules = [
+        'title' => 'required'
+    ];
 
-    public function __construct(PostTransformer $transformer)
+    public function __construct(Post $post, PostTransformer $transformer)
     {
+        $this->model = $post;
         $this->transformer = $transformer;
     }
 
     public function index()
     {
-    	return $this->listResponse(Post::all(), $this->transformer);
+    	return $this->listResponse($this->model->all(), $this->transformer);
     }
 
     public function show($id)
     {
-        if ($post = Post::find($id))
+        if ($post = $this->model->find($id))
         {
             return $this->showResponse($post, $this->transformer);
         }
         return $this->notFoundResponse();
     }
 
-    public function store(PostRequest $request)
+    public function store(Request $request)
     {
-    	$post = Post::create($request->all());
+        $v = Validator::make($request->all(), $this->validationRules);
+        if ($v->fails())
+        {
+            throw new ValidationException($v);
+        }
+        $post = $this->model->create($request->all());
         return $this->showResponse($post, $this->transformer);
     }
 
-    public function update(PostRequest $request, $id)
+    public function update(Request $request, $id)
     {
-    	if (!$post = Post::find($id))
+    	if (!$post = $this->model->find($id))
     	{
     		return $this->notFoundResponse();
     	}
 
+        $v = Validator::make($request->all(), $this->validationRules);
+        if ($v->fails())
+        {
+            throw new ValidationException($v);
+        }
     	$post->fill($request->all())->save();
     	return $this->showResponse($post, $this->transformer);
     }
 
     public function destroy($id)
     {
-    	if (!$post = Post::find($id))
+    	if (!$post = $this->model->find($id))
     	{
     		return $this->notFoundResponse();
     	}

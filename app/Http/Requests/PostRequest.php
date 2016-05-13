@@ -3,6 +3,7 @@
 namespace Nht\Http\Requests;
 
 use Nht\Http\Requests\Request;
+use Illuminate\Contracts\Validation\Validator;
 
 class PostRequest extends Request
 {
@@ -15,6 +16,11 @@ class PostRequest extends Request
     {
         return true;
     }
+
+    // public function formatErrors(Validator $validator)
+    // {
+    //     return $validator->errors()->all();
+    // }
 
     /**
      * Get the validation rules that apply to the request.

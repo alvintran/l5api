@@ -45,6 +45,15 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
+        if ($e instanceof ValidationException)
+        {
+            $data = ['form_validations' => $e->validator->errors(), 'exception' => $e->getMessage()];
+            return response()->json([
+                'status' => 'error',
+                'data' => $data,
+                'message' => 'Unprocessable entity'
+            ], 422);
+        }
         return parent::render($request, $e);
     }
 }
