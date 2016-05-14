@@ -33,6 +33,13 @@ class PostCest
     public function getSinglePost(ApiTester $I)
     {
         $I->amBearerAuthenticated($this->token);
+
+        // Get a not exist post
+        $I->sendGET($this->endpoint."/99999999");
+        $I->seeResponseCodeIs(404);
+        $I->seeResponseIsJson();
+        $I->seeResponseContains('Post not found');
+
         $id = (string) $this->havePost($I, ['title' => 'Starwars']);
         $I->sendGET($this->endpoint."/$id");
         $I->seeResponseCodeIs(200);
@@ -93,8 +100,8 @@ class PostCest
        $data = array_merge([
                'title' => 'Game of Thrones',
                'body' => 'Body',
-               'created_at' => new DateTime(),
-               'updated_at' => new  DateTime(),
+               'created_at' => new \DateTime(),
+               'updated_at' => new  \DateTime(),
        ], $data);
        return $I->haveRecord('posts', $data);
     }

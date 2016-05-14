@@ -1,7 +1,7 @@
 <?php namespace Nht\Http\Transformers;
 
 use League\Fractal\TransformerAbstract;
-use Nht\Post;
+use Nht\Hocs\Posts\Post;
 
 class PostTransformer extends TransformerAbstract
 {

@@ -18,7 +18,7 @@ Route::get('/', function () {
 Route::post('/login', 'Api\AuthenticateController@authenticate');
 
 Route::group([
-    'middleware' => 'jwt.auth',
+    // 'middleware' => 'jwt.auth',
     'namespace' => 'Api\V1',
 ], function($app) {
 	Route::resource('posts', 'PostController');

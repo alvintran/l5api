@@ -7,6 +7,7 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
@@ -45,14 +46,16 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        if ($e instanceof ValidationException)
+        /**
+         * Custom exception
+         */
+        if ($e instanceof NotFoundHttpException)
         {
-            $data = ['form_validations' => $e->validator->errors(), 'exception' => $e->getMessage()];
             return response()->json([
                 'status' => 'error',
-                'data' => $data,
-                'message' => 'Unprocessable entity'
-            ], 422);
+                'data' => $e->getMessage(),
+                'message' => 'Not Found'
+            ], $e->getStatusCode());
         }
         return parent::render($request, $e);
     }
