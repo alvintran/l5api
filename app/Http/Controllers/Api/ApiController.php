@@ -26,8 +26,8 @@ abstract class ApiController extends Controller
         if ($transformer)
         {
             $fractal = new Manager;
-            $data = new Item($data, $transformer);
-            $data = $fractal->createData($data)->toArray();
+            $resource = new Item($data, $transformer);
+            $data = $fractal->createData($resource)->toArray();
         }
         return $this->response($data);
     }
@@ -43,8 +43,8 @@ abstract class ApiController extends Controller
         if ($transformer)
         {
             $fractal = new Manager;
-            $data = new Collection($data, $transformer);
-            $data = $fractal->createData($data)->toArray();
+            $resource = new Collection($data, $transformer);
+            $data = $fractal->createData($resource)->toArray();
         }
         return $this->response($data);
     }

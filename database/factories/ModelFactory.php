@@ -19,3 +19,10 @@ $factory->define(Nht\User::class, function (Faker\Generator $faker) {
         'remember_token' => str_random(10),
     ];
 });
+
+$factory->define(Nht\Hocs\Posts\Post::class, function (Faker\Generator $faker) {
+    return [
+        'title' => $faker->name,
+        'body' => 'Body',
+    ];
+});

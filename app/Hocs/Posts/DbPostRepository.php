@@ -21,11 +21,11 @@ class DbPostRepository implements PostRepository
 
     /**
      * Get all post
-     * @return \Illuminate\Support\Collection
+     * @return \Illuminate\Database\Eloquent\Collection
      */
     public function getAll()
     {
-        return $this->model->all();
+        return $this->model->simplePaginate();
     }
 
     /**
