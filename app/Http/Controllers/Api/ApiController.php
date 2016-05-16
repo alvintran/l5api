@@ -6,9 +6,12 @@ use Illuminate\Http\Response as HttpResponse;
 use League\Fractal\Manager;
 use League\Fractal\Resource\Item;
 use League\Fractal\Resource\Collection;
+use Nht\Hocs\Helpers\NhtFractal;
 
 abstract class ApiController extends Controller
 {
+    protected $fractal;
+
     /**
      * Status code for response
      * @var int
@@ -23,12 +26,8 @@ abstract class ApiController extends Controller
      */
     protected function showResponse($data, $transformer = null)
     {
-        if ($transformer)
-        {
-            $fractal = new Manager;
-            $resource = new Item($data, $transformer);
-            $data = $fractal->createData($resource)->toArray();
-        }
+        $fractal = \App::make(NhtFractal::class);
+        $data = $fractal->setTransformer($transformer)->getData($data);
         return $this->response($data);
     }
 
@@ -40,12 +39,8 @@ abstract class ApiController extends Controller
      */
     protected function listResponse($data, $transformer = null)
     {
-        if ($transformer)
-        {
-            $fractal = new Manager;
-            $resource = new Collection($data, $transformer);
-            $data = $fractal->createData($resource)->toArray();
-        }
+        $fractal = \App::make(NhtFractal::class);
+        $data = $fractal->setTransformer($transformer)->getData($data);
         return $this->response($data);
     }
 

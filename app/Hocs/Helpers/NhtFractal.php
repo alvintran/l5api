@@ -14,14 +14,17 @@ class NhtFractal
     protected $manager;
     protected $transformer;
 
-    public function __construct()
+    public function __construct(Manager $manager)
     {
-        $this->manager = new Manager;
+        $this->manager = $manager;
     }
 
     public function setTransformer($transformer)
     {
-        $this->transformer = $transformer;
+        if ( $transformer && !$this->getTransformer())
+        {
+            $this->transformer = $transformer;
+        }
         return $this;
     }
 
@@ -30,10 +33,11 @@ class NhtFractal
         return $this->transformer;
     }
 
-    public function getData($data, $transformer)
+    public function getData($data, $transformer = null)
     {
         $this->setTransformer($transformer);
-        if ( ! $this->getTransformer() instanceof TransformerAbstract)
+
+        if ( !$this->getTransformer() instanceof TransformerAbstract)
         {
             return ['data' => []];
         }

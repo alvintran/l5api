@@ -156,9 +156,10 @@ return [
         Nht\Providers\EventServiceProvider::class,
         Nht\Providers\RouteServiceProvider::class,
         Nht\Providers\PostServiceProvider::class,
+        Nht\Providers\NhtFractalServiceProvider::class,
 
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
-        Barryvdh\Cors\ServiceProvider::class
+        Barryvdh\Cors\ServiceProvider::class,
 
     ],
 
