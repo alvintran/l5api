@@ -12,13 +12,22 @@ use Illuminate\Pagination\AbstractPaginator;
 class NhtFractal
 {
     protected $manager;
-    protected $config;
     protected $transformer;
 
-    public function __construct($config = [])
+    public function __construct()
     {
-        $this->config = $config;
         $this->manager = new Manager;
+    }
+
+    public function setTransformer($transformer)
+    {
+        $this->transformer = $transformer;
+        return $this;
+    }
+
+    public function getTransformer()
+    {
+        return $this->transformer;
     }
 
     public function getData($data, $transformer)
@@ -40,19 +49,19 @@ class NhtFractal
         }
     }
 
-    public function item($data)
+    private function item($data)
     {
         $resource = new FItem($data, $this->getTransformer());
         return $this->manager->createData($resource)->toArray();
     }
 
-    public function collection($data)
+    private function collection($data)
     {
         $resource = new FCollection($data, $this->getTransformer());
         return $this->manager->createData($resource)->toArray();
     }
 
-    public function paginate($paginator)
+    private function paginate($paginator)
     {
         $data = $paginator->getCollection();
         $queryParams = array_diff_key($_GET, array_flip(['page']));
@@ -60,16 +69,5 @@ class NhtFractal
         $resource = new FCollection($data, $this->getTransformer());
         $resource->setPaginator(new IlluminatePaginatorAdapter($paginator));
         return $this->manager->createData($resource)->toArray();
-    }
-
-    public function setTransformer($transformer)
-    {
-        $this->transformer = $transformer;
-        return $this;
-    }
-
-    public function getTransformer()
-    {
-        return $this->transformer;
     }
 }
