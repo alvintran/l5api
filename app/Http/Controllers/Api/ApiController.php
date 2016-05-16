@@ -3,9 +3,6 @@
 use Illuminate\Http\Request;
 use Nht\Http\Controllers\Controller;
 use Illuminate\Http\Response as HttpResponse;
-use League\Fractal\Manager;
-use League\Fractal\Resource\Item;
-use League\Fractal\Resource\Collection;
 use Nht\Hocs\Helpers\NhtFractal;
 
 abstract class ApiController extends Controller

@@ -10,6 +10,14 @@ class NhtFractalTest extends TestCase
 
     use DatabaseTransactions;
 
+    public $fractal;
+
+    public function setUp()
+    {
+        $this->fractal = app(NhtFractal::class);
+        parent::setUp();
+    }
+
     /**
      * Get a transform of Post
      *
@@ -18,8 +26,7 @@ class NhtFractalTest extends TestCase
     public function testTransformAPostItem()
     {
         $post = factory(Nht\Hocs\Posts\Post::class)->make();
-        $fractal = new NhtFractal();
-        $expected = $fractal->getData($post, new PostTransformer);
+        $expected = $this->fractal->getData($post, new PostTransformer);
         $this->assertEquals([
             'data' => [
                 'id' => $post->id,
@@ -35,8 +42,7 @@ class NhtFractalTest extends TestCase
     {
         $posts = factory(Nht\Hocs\Posts\Post::class, 3)->make();
         $postList = new Collection($posts);
-        $fractal = new NhtFractal();
-        $expected = $fractal->getData($postList, new PostTransformer);
+        $expected = $this->fractal->getData($postList, new PostTransformer);
         $this->assertEquals([
             'data' => [
                 [
@@ -66,16 +72,14 @@ class NhtFractalTest extends TestCase
 
     public function testWillNotTransform()
     {
-        $fractal = new NhtFractal();
-
         $post = factory(Nht\Hocs\Posts\Post::class)->make();
-        $expected1 = $fractal->getData($post, null);
+        $expected1 = $this->fractal->getData($post, null);
         $this->assertEquals([
             'data' => []
         ], $expected1);
 
         $posts = factory(Nht\Hocs\Posts\Post::class, 3)->make();
-        $expected2 = $fractal->getData($posts, null);
+        $expected2 = $this->fractal->getData($posts, null);
         $this->assertEquals([
             'data' => []
         ], $expected2);
@@ -83,10 +87,9 @@ class NhtFractalTest extends TestCase
 
     public function testPaginateAList()
     {
-        $fractal = new NhtFractal();
         $posts = factory(Nht\Hocs\Posts\Post::class, 3)->make();
         $paginator = new \Illuminate\Pagination\LengthAwarePaginator($posts, 3, 1);
-        $expected = $fractal->getData($paginator, new PostTransformer);
+        $expected = $this->fractal->getData($paginator, new PostTransformer);
         $this->assertEquals([
             'data' => [
                 [
