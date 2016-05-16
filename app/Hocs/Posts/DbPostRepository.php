@@ -25,7 +25,7 @@ class DbPostRepository implements PostRepository
      */
     public function getAll()
     {
-        return $this->model->simplePaginate();
+        return $this->model->all();
     }
 
     /**
